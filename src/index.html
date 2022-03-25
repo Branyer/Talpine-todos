@@ -1,17 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <div x-data="{ open: false }">
-        <div x-data="{ label: 'Content:' }">
-            <span x-text="label"></span>
-            <span x-show="open"></span>
+  </head>
+  <body class="bg-gray-900">
+    <main
+      x-data="todosState"
+      class="min-h-screen min-w-full flex items-center justify-center"
+    >
+      <div class="text-white w-3/6">
+        <h1 class="text-5xl font-bold tracking-widest mb-5">TODO</h1>
+        <form @submit.prevent="addTodo()">
+            <input
+              class="bg-gray-800 p-3 rounded-md shadow-sm shadow-black w-full outline-0"
+              type="text"
+              placeholder="Create a new todo ..."
+              x-model="newTodoDescription"
+    
+            />
+        </form>
+        <div class="bg-gray-800 p-3 rounded-md shadow-sm shadow-black mt-5">
+          <ul>
+            <template
+              x-for="(todo, index) in filterTodos()"
+              :key="index"
+            >
+              <li class="flex items-center p-5 border-b-2 border-gray-700">
+                <div
+                  @click="changeTodoStatus(index)"
+                  x-bind:class=" ` ${todo.status === 'active' ? 'bg-slate-400' : 'bg-green-400' } rounded-full  w-4 h-4 cursor-pointer`"
+                ></div>
+                <span class="ml-2" x-text="todo.description"></span>
+              </li>
+            </template>
+          </ul>
+          <div class="flex w-full justify-between p-3 pb-0 text-gray-500">
+            <span x-text="todos.length + ' items left'"></span>
+            <div>
+              <button
+                @click="todoSearchType =  'all'"
+                x-bind:class=" todoSearchType === 'all' && 'text-blue-400 ' "
+              >
+                All
+              </button>
+              <button
+                @click="todoSearchType =  'active'"
+                x-bind:class=" todoSearchType === 'active' && 'text-blue-400' "
+              >
+                Active
+              </button>
+              <button
+                @click="todoSearchType =  'completed'"
+                x-bind:class=" todoSearchType === 'completed' && 'text-blue-400' "
+              >
+                Completed
+              </button>
+            </div>
+            <button
+              @click="clearCompleted()"
+            >
+              Clear Completed
+            </button>
+          </div>
         </div>
-    </div>
-</body>
+      </div>
+    </main>
+  </body>
 </html>
